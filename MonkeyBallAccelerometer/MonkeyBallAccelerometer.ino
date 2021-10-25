@@ -74,11 +74,11 @@ void writeAnalogStick(int xPos, int yPos, int zPos) {
 
   // if joystick is below min
   if (modifiedXPos < 0) {
-    modifiedXPos = 0;
+    modifiedXPos = 1;
   }
   if (modifiedYPos < 0) {
-    modifiedYPos = 0;
+    modifiedYPos = 1;
   }
-  
- Serial.println("X: " + String(modifiedXPos) + ", Y: " + String(modifiedYPos));
+
+ Serial.println("x" + String(modifiedXPos) + "|y" + String(modifiedYPos) + "~");
 }

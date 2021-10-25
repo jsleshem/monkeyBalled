@@ -1,29 +1,33 @@
 import pyvjoy
-import time
-
-from pip._vendor.distlib.compat import raw_input
+import serial
 
 controller = pyvjoy.VJoyDevice(1)
 
-# while True:
-#     for i in range(327):
-#         if (i == 325):
-#             i == 0
-#         controller.set_axis(pyvjoy.HID_USAGE_X, i*100)
-#         time.sleep(0.1)
-#         print(i)
+serial_connection = serial.Serial('COM8', 9600)
+
+print("connected to: " + serial_connection.portstr)
+
+controller.set_button(1, 0)
 
 while True:
-    i = raw_input("key: ")
-    if (i == "a"):
-        for i in range(3):
-            print(3 - i)
-            time.sleep(1)
-        controller.set_button(1, 1)
-        print("A on")
-        time.sleep(2)
-        controller.set_button(1, 0)
-        print("A off")
+    inputData = str(serial_connection.readline())
 
+    Xstart = inputData.find("x") + len("x")
+    Xend = inputData.find("|")
+    try:
+        XcleanInputData = int(inputData[Xstart:Xend])
+    except:
+        print("Bad value - " + inputData)
+
+    Ystart = inputData.find("y") + len("y")
+    Yend = inputData.find("~")
+    try:
+        YcleanInputData = int(inputData[Ystart:Yend])
+    except:
+        print("Bad value - " + inputData)
+
+    controller.set_axis(pyvjoy.HID_USAGE_X, XcleanInputData)
+    controller.set_axis(pyvjoy.HID_USAGE_Y, YcleanInputData)
+ser.close()
 
 print("end")
